@@ -68,6 +68,20 @@ module TerraformDsl
     end
   end
 
+  # Ensure an Ubuntu PPA is installed. The argument is the ppa location, in the form ppa:[USER]/[NAME]
+  def ensure_ppa(ppa)
+    ppa_part, location = ppa.split(":", 2)
+    fail_and_exit("PPA location must be of the form ppa:[USER]/[NAME]") unless ppa_part && location
+    ensure_package("python-software-properties")
+    dep "ppa: #{location}" do
+      met? { !`apt-cache policy 2> /dev/null | grep ppa.launchpad.net/#{location}/`.empty? }
+      meet do
+        shell "sudo add-apt-repository #{ppa}"#, :silent => true
+        shell "sudo apt-get update"#, :silent => true
+      end
+    end
+  end
+
   def gem_installed?(gem) `gem list '#{gem}'`.include?(gem) end
 
   def ensure_gem(gem)
