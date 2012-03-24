@@ -62,7 +62,7 @@ module TerraformDsl
 
   def ensure_packages(*packages) packages.each { |package| ensure_package(package) } end
   def ensure_package(package)
-    dep package do
+    dep "package: #{package}" do
       met? { package_installed?(package) }
       meet { install_package(package) }
     end
@@ -71,7 +71,7 @@ module TerraformDsl
   def gem_installed?(gem) `gem list '#{gem}'`.include?(gem) end
 
   def ensure_gem(gem)
-    dep gem do
+    dep "gem: #{gem}" do
       met? { gem_installed?(gem) }
       meet { shell "gem install #{gem} --no-ri --no-rdoc" }
     end
@@ -80,7 +80,7 @@ module TerraformDsl
   # Ensures the file at dest_path is exactly the same as the one in source_path.
   # Invokes the given block if the file is changed. Use this block to restart a service, for instance.
   def ensure_file(source_path, dest_path, &on_change)
-    dep dest_path do
+    dep "file: #{dest_path}" do
       met? do
         raise "This file does not exist: #{source_path}" unless File.exists?(source_path)
         File.exists?(dest_path) && (Digest::MD5.file(source_path) == Digest::MD5.file(dest_path))
@@ -113,7 +113,7 @@ module TerraformDsl
     ensure_rbenv
     ensure_packages "curl", "build-essential", "libxslt1-dev", "libxml2-dev", "libssl-dev"
 
-    dep "rbenv ruby #{ruby_version}" do
+    dep "rbenv ruby: #{ruby_version}" do
       met? { `which ruby`.include?("rbenv") && `ruby -v`.include?(ruby_version.gsub("-", "")) }
       meet do
         puts "Compiling Ruby will take a few minutes."
