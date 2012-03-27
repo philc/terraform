@@ -73,7 +73,7 @@ module TerraformDsl
   # Ensure an Ubuntu PPA is installed. The argument is the ppa location, in the form ppa:[USER]/[NAME]
   def ensure_ppa(ppa)
     ppa_part, location = ppa.split(":", 2)
-    fail_and_exit("PPA location must be of the form ppa:[USER]/[NAME]") unless ppa_part && location
+    fail_and_exit("PPA location must be of the form ppa:[USER]/[NAME]") unless (ppa_part == "ppa") && location
     ensure_package("python-software-properties")
     dep "ppa: #{location}" do
       met? { !`apt-cache policy 2> /dev/null | grep ppa.launchpad.net/#{location}/`.empty? }
