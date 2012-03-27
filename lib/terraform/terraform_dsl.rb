@@ -108,6 +108,18 @@ module TerraformDsl
     end
   end
 
+  # A task which must be run once to be 'met'. For instance, this might be the DB migration script.
+  def ensure_run_once(name, &block)
+    dep "run task once: #{name}" do
+      has_run_once = false
+      met? { has_run_once }
+      meet do
+        yield
+        has_run_once = true
+      end
+    end
+  end
+
   def ensure_rbenv
     ensure_package "git-core"
     dep "rbenv" do
