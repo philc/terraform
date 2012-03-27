@@ -21,6 +21,8 @@ module TerraformDsl
     return if @dependencies.find { |dep| dep[:name] == name }
     @dependencies.push(@current_dependency = { :name => name })
     yield
+    fail_and_exit "Error: no 'met?' block defined for dep '#{name}'." unless @current_dependency[:met?]
+    fail_and_exit "Error: no 'meet' block defined for dep '#{name}'." unless @current_dependency[:meet]
   end
   def met?(&block) @current_dependency[:met?] = block end
   def meet(&block) @current_dependency[:meet] = block end
