@@ -1,16 +1,3 @@
-# This is small goal-oriented DSL for installing system components, similar in purpose to Chef and Puppet.
-# Its design is inspired by Babushka but it's simpler and tailored specifically for provisioning a machine
-# for a webapp.
-#
-# Usage:
-#
-# require "terraform_dsl"
-# include Terraform::Dsl
-# dep "my library" do
-#   met? { (check if your dependency is met) }
-#   meet { (install your dependency) }
-# end
-
 require "fileutils"
 require "digest/md5"
 
