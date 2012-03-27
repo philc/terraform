@@ -1,8 +1,8 @@
 require File.expand_path(File.join(File.dirname(__FILE__), "../../test_helper.rb"))
-require "terraform/terraform_dsl"
+require "terraform/dsl"
 
 class DslTest < Scope::TestCase
-  include TerraformDsl
+  include Terraform::Dsl
 
   class ProcessExit < StandardError; end
 
