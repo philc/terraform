@@ -62,6 +62,8 @@ module Terraform
     def ensure_ppa(ppa)
       ppa_part, location = ppa.split(":", 2)
       fail_and_exit("PPA location must be of the form ppa:[USER]/[NAME]") unless (ppa_part == "ppa") && location
+      # The python-software-properties package provides the add-apt-repository convenience tool for editing
+      # the list of apt's source repositories.
       ensure_package("python-software-properties")
       dep "ppa: #{location}" do
         met? { !`apt-cache policy 2> /dev/null | grep ppa.launchpad.net/#{location}/`.empty? }
