@@ -1,7 +1,10 @@
+Terraform
+---------
+
 Terraform is a small goal-oriented Ruby DSL for setting up a machine, similar in purpose to Chef and Puppet,
 but without the complexity. It's tailored for the kinds of tasks needed for deploying web apps and is designed
 to be refreshingly easy to understand and debug. You can read through the entire Terraform library in two
-minutes and know exactly what it will and won't do for you. Terraform's design is inspired by Babushka.
+minutes and know precisely what it will and won't do for you. Its design is inspired by Babushka.
 
 Usage
 -----
@@ -19,7 +22,7 @@ This is the basic structure of a system provisioning script written using Terraf
 
     satisfy_dependencies()
 
-The Terraform DSL provides these functions which are commonly used when provisioning a system for a web service:
+The Terraform DSL provides these functions which are commonly used when provisioning systems to run web services.
 
 <table>
   <tr>
@@ -35,15 +38,12 @@ The Terraform DSL provides these functions which are commonly used when provisio
     <td>True if an apt-get package is installed.</td>
   </tr>
   <tr>
-    <td>install_package(package_name)</td>
-    <td>apt-get install the given package.</td>
-  <tr>
     <td>ensure_packages(*package_names)</td>
     <td>Ensures the given packages are installed via apt-get.</td>
   </tr>
   <tr>
     <td>ensure_ppa(ppa_url)</td>
-    <td>Ensures the given PPA (used on Ubuntu) is installed. `ppa_url` is of the form "ppa:user/name".</td>
+    <td>Ensures the given PPA (used on Ubuntu) is installed. "ppa_url" is of the form "ppa:user/name".</td>
   </tr>
   <tr>
     <td>gem_installed?(name)</td>
@@ -54,12 +54,13 @@ The Terraform DSL provides these functions which are commonly used when provisio
     <td>Ensures the given Ruby gem is installed.</td>
   </tr>
   <tr>
-    <td>ensure_rbenv</td>
+    <td>ensure_rbenv()</td>
     <td>Ensures rbenv is installed.</td>
   </tr>
   <tr>
     <td>ensure_rbenv_ruby(ruby_version)</td>
-    <td>Installs the given version of ruby. `ruby_version` is an rbenv ruby version string like "1.9.2.-p290"</td>
+    <td>Ensures the given version of Ruby is installed. `ruby_version` is an rbenv Ruby version string like
+        "1.9.2.-p290".</td>
   </tr>
   <tr>
     <td>ensure_run_once(dependency_name, block)</td>
@@ -67,8 +68,8 @@ The Terraform DSL provides these functions which are commonly used when provisio
   </tr>
   <tr>
     <td>ensure_file(source_path, dest_path, on_change)</td>
-    <td>Ensures the file at dest_path is the exact same as the file in the source path. Use this for copying
-        configuration files (e.g. nginx.conf) to their proper locations</td>
+    <td>Ensures the file at dest_path is the exact same as the file at source_path. Use this for copying
+        configuration files (e.g. nginx.conf) to their proper locations.</td>
   </tr>
   <tr>
     <td>fail_and_exit(message)</td>
@@ -96,10 +97,13 @@ script, prior to copying it over to your remote machine:
     Terraform.write_dsl_file("/tmp/staging/my_app/terraform_dsl.rb")
 
 Terraform is designed to be run on a barebones machine with little preinstalled software. The only requirement
-is that any version of Ruby is installed on the machine you're provisioning.
+is that some version (any version) of Ruby is installed on the machine you're provisioning.
 
 Examples
 --------
+See the [Terraform library itself](https://github.com/philc/terraform/blob/master/lib/terraform/dsl.rb), which
+makes use of the DSL quite a bit.
+
 [Barkeep](https://github.com/ooyala/barkeep) is a code review system which uses Terraform for provisioning the
 machines it gets deployed to. You can see its system provisioning script written using Terraform
 [here](https://github.com/ooyala/barkeep/blob/master/script/system_setup.rb), and its Fezzik deploy script
@@ -107,10 +111,10 @@ machines it gets deployed to. You can see its system provisioning script written
 
 Contribute
 ----------
-When developing this gem you can test your changes by loading your local copy of the gem in your project's
-Gemfile:
+When developing this gem you can quickly preview and test your changes by loading your local copy of the gem
+in your project's Gemfile:
 
-    gem "terraform", :path => "~/p/terraform"
+    gem "terraform", :path => "~/path/to/terraform_checkout"
 
 Credits
 -------
