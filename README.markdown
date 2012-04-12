@@ -22,7 +22,7 @@ This is the basic structure of a system provisioning script written using Terraf
 
     satisfy_dependencies()
 
-The Terraform DSL provides these functions which are commonly used when provisioning systems to run web services.
+The Terraform DSL provides these functions which are commonly used when provisioning systems to run web services:
 
 <table>
   <tr>
@@ -77,7 +77,7 @@ The Terraform DSL provides these functions which are commonly used when provisio
   </tr>
 </table>
 
-For further details, see the [source](https://github.com/philc/terraform/blob/master/lib/terraform/dsl.rb).
+For further details, see [the source](https://github.com/philc/terraform/blob/master/lib/terraform/dsl.rb).
 It's a short, well-documented file and there's no magic.
 
 Installation
