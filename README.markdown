@@ -19,35 +19,65 @@ This is the basic structure of a system provisioning script written using Terraf
 
     satisfy_dependencies()
 
-The Terraform DSL provides these functions which are commonly used in deployments:
+The Terraform DSL provides these functions which are commonly used when provisioning a system for a web service:
 
 <table>
   <tr>
-    <td>**`shell(command)`**</td>
+    <td>shell(command)</td>
     <td>Executes a shell command.</td>
   </tr>
   <tr>
-    <td>**`in_path?(command)`**</td>
+    <td>in_path?(command)</td>
     <td>True if the command is in the current path.</td>
+  </tr>
+  <tr>
+    <td>package_installed?(package_name)</td>
+    <td>True if an apt-get package is installed.</td>
+  </tr>
+  <tr>
+    <td>install_package(package_name)</td>
+    <td>apt-get install the given package.</td>
+  <tr>
+    <td>ensure_packages(*package_names)</td>
+    <td>Ensures the given packages are installed via apt-get.</td>
+  </tr>
+  <tr>
+    <td>ensure_ppa(ppa_url)</td>
+    <td>Ensures the given PPA (used on Ubuntu) is installed. `ppa_url` is of the form "ppa:user/name".</td>
+  </tr>
+  <tr>
+    <td>gem_installed?(name)</td>
+    <td>True if the given Ruby gem is installed.</td>
+  </tr>
+  <tr>
+    <td>ensure_gem(name)</td>
+    <td>Ensures the given Ruby gem is installed.</td>
+  </tr>
+  <tr>
+    <td>ensure_rbenv</td>
+    <td>Ensures rbenv is installed.</td>
+  </tr>
+  <tr>
+    <td>ensure_rbenv_ruby(ruby_version)</td>
+    <td>Installs the given version of ruby. `ruby_version` is an rbenv ruby version string like "1.9.2.-p290"</td>
+  </tr>
+  <tr>
+    <td>ensure_run_once(dependency_name, block)</td>
+    <td>Runs the given block once. Use for tasks that you're too lazy to write a proper `met?` block for, like running database migrations.</td>
+  </tr>
+  <tr>
+    <td>ensure_file(source_path, dest_path, on_change)</td>
+    <td>Ensures the file at dest_path is the exact same as the file in the source path. Use this for copying
+        configuration files (e.g. nginx.conf) to their proper locations</td>
+  </tr>
+  <tr>
+    <td>fail_and_exit(message)</td>
+    <td>Use when your meet() block encounters an error and cannot satisfy a dependency.</td>
   </tr>
 </table>
 
-
-* **`package_installed?(package_name)`** - True if an apt-get package is installed.
-* **`install_package(package_name)`** - apt-get install the given package.
-* **`ensure_packages(*package_names)`** - Ensures the given packages are installed via apt-get.
-* **`ensure_ppa(ppa_url)`** - Ensures the given PPA (used on Ubuntu) is installed. `ppa_url` is of the form "ppa:user/name".
-* **`gem_installed?(name)`** - True if the given gem is installed.
-* **`ensure_gem(name)`** - Ensures the given gem is isntalled.
-* **`ensure_rbenv`** - Ensures rbenv is installed.
-* **`ensure_rbenv_ruby(ruby_version)`** - Installs the given version of ruby. `ruby_version` is an rbenv ruby version string like "1.9.2.-p290".
-* **`ensure_run_once(dependency_name, block)`** - Runs the given block once. Use for tasks that you're too lazy to write a proper `met?` block for, like running database migrations.
-* **`ensure_file(source_path, dest_path, on_change)`** - Ensures the file at dest_path is the exact same as the file in the source path. Use this for copying configuration files (e.g. nginx.conf) to their proper locations.
-* **`fail_and_exit(message)`** - Use when your meet() block encounters an error and cannot satisfy a dependency.
-
-For further details, view the [Terraform
-library](https://github.com/philc/terraform/blob/master/lib/terraform/dsl.rb). It's short and there's no
-magic.
+For further details, see the [source](https://github.com/philc/terraform/blob/master/lib/terraform/dsl.rb).
+It's a short, well-documented file and there's no magic.
 
 Installation
 ------------
@@ -59,8 +89,8 @@ terraform`
 3. Copy your system provisioning script and the Terraform library (which is a single file) to your remote
 machine and run it. Do this as part of your deploy script.
 
-You can use the Terraform gem to write the Terraform library out to a file as part of your deploy script,
-prior to copying it over to your remote machine:
+You can use the Terraform gem to write the Terraform library out to a single file as part of your deploy
+script, prior to copying it over to your remote machine:
 
     require "terraform"
     Terraform.write_dsl_file("/tmp/staging/my_app/terraform_dsl.rb")
@@ -68,10 +98,12 @@ prior to copying it over to your remote machine:
 Terraform is designed to be run on a barebones machine with little preinstalled software. The only requirement
 is that any version of Ruby is installed on the machine you're provisioning.
 
-Examples in the wild
---------------------
-Barkeep is a code review system which uses Terraform for provisioning the machines it gets deployed to. You
-can see its system provisioning script written using Terraform [here](https://github.com/ooyala/barkeep/blob/master/script/system_setup.rb), and its Fezzik deploy script [here](https://github.com/ooyala/barkeep/blob/master/config/tasks/deploy.rake).
+Examples
+--------
+[Barkeep](https://github.com/ooyala/barkeep) is a code review system which uses Terraform for provisioning the
+machines it gets deployed to. You can see its system provisioning script written using Terraform
+[here](https://github.com/ooyala/barkeep/blob/master/script/system_setup.rb), and its Fezzik deploy script
+[here](https://github.com/ooyala/barkeep/blob/master/config/tasks/deploy.rake).
 
 Contribute
 ----------
