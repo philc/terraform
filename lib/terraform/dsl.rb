@@ -18,8 +18,8 @@ module Terraform
     def fail_and_exit(message) puts message; exit 1 end
 
     # Runs a command and raises an exception if its exit status was nonzero.
+    # Options:
     # - silent: if false, log the command being run and its stdout. False by default.
-    # - check_exit_code: raises an error if the command had a non-zero exit code. True by default.
     def shell(command, options = {})
       silent = (options[:silent] != false)
       puts command unless silent
