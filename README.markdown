@@ -11,7 +11,7 @@ Usage
 This is the basic structure of a system provisioning script written using Terraform:
 
     require "terraform_dsl"
-    include Terraform::Dsl
+    include Terraform::DSL
 
     dep "pygments" do
       met? { in_path? "pygmentize" }         # Check if your dependency is met.
@@ -27,7 +27,8 @@ The Terraform DSL provides these functions which are commonly used when provisio
 <table>
   <tr>
     <td>shell(command)</td>
-    <td>Executes a shell command.</td>
+    <td>Executes a shell command. Use this generally instead of backticks. It raises an exception if the exit
+        status of the command was nonzero, and prints the command string as well as the output.</td>
   </tr>
   <tr>
     <td>in_path?(command)</td>
@@ -35,7 +36,7 @@ The Terraform DSL provides these functions which are commonly used when provisio
   </tr>
   <tr>
     <td>package_installed?(package_name)</td>
-    <td>True if an apt-get package is installed.</td>
+    <td>True if a package is installed. Currently only apt-get is supported.</td>
   </tr>
   <tr>
     <td>ensure_packages(*package_names)</td>
