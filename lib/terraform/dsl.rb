@@ -2,7 +2,7 @@ require "fileutils"
 require "digest/md5"
 
 module Terraform
-  module Dsl
+  module DSL
     def dep(name)
       @dependencies ||= []
       # If a dep gets required or defined twice, only run it once.
