@@ -38,6 +38,7 @@ module Terraform
           fail_and_exit %Q("met?" for #{dep[:name]} is still false after running "meet".) unless dep[:met?].call
         end
       end
+      @dependencies = []
     end
 
     #

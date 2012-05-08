@@ -68,6 +68,27 @@ class DslTest < Scope::TestCase
       end
       assert_raises(ProcessExit) { capture_output { satisfy_dependencies } }
     end
+
+    should "allow multiple invocations of satisfy_dependencies, each with different deps" do
+      dep1_has_run = false
+      dep "dep1" do
+        met? { dep1_has_run }
+        meet { dep1_has_run = true }
+      end
+      capture_output { satisfy_dependencies }
+      assert dep1_has_run
+
+      dep1_has_run = false
+      dep2_has_run = false
+      dep "dep2" do
+        met? { dep2_has_run }
+        meet { dep2_has_run = true }
+      end
+      # This invocation of satisfy_dependencies should only run dep2, not dep1.
+      capture_output { satisfy_dependencies }
+      assert dep2_has_run
+      assert_equal false, dep1_has_run
+    end
   end
 
   context "ensure_ppa" do
