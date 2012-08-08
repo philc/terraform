@@ -133,7 +133,7 @@ module Terraform
       ensure_packages "curl", "build-essential", "libxslt1-dev", "libxml2-dev", "libssl-dev"
 
       dep "rbenv ruby: #{ruby_version}" do
-        met? { `which ruby`.include?("rbenv") && `rbenv versions`.include?(ruby_version) }
+        met? { `bash -lc 'which ruby'`.include?("rbenv") && `rbenv versions`.include?(ruby_version) }
         meet do
           puts "Compiling Ruby will take a few minutes."
           shell "rbenv install #{ruby_version}"
