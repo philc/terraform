@@ -45,7 +45,7 @@ module Terraform
     # These are very common tasks which are needed by almost everyone, and so they're bundled with this DSL.
     #
 
-    def package_installed?(package) `dpkg -s #{package} 2> /dev/null | grep Status`.match(/\sinstalled/) end
+    def package_installed?(package) !!`dpkg -s #{package} 2> /dev/null | grep Status`.match(/\sinstalled/) end
     def install_package(package)
       # Specify a noninteractive frontend, so dpkg won't prompt you for info. -q is quiet; -y is "answer yes".
       shell "sudo DEBIAN_FRONTEND=noninteractive apt-get install -qy #{package}"
