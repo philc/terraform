@@ -115,4 +115,11 @@ class DslTest < Scope::TestCase
       assert meet_run
     end
   end
+
+  context "ensure_user" do
+    should "determine if a user exists" do
+      assert user_exists?("root")
+      refute user_exists?("fake_username")
+    end
+  end
 end
