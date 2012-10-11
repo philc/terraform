@@ -142,7 +142,7 @@ module Terraform
       end
     end
 
-    def user_exists?(username) `id #{username} 2> /dev/null`.match(/^uid=\d+/) end
+    def user_exists?(username) !!`id #{username} 2> /dev/null`.match(/^uid=\d+/) end
     def create_user(username) shell "useradd -m #{username}" end
 
     def ensure_user(username)
