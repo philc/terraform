@@ -110,6 +110,46 @@ machines it gets deployed to. You can see its system provisioning script written
 [here](https://github.com/ooyala/barkeep/blob/master/script/system_setup.rb), and its Fezzik deploy script
 [here](https://github.com/ooyala/barkeep/blob/master/config/tasks/deploy.rake).
 
+Plugins
+----------
+Terraform can be easily extended with custom deps distributed as gems or scripts. A library that defines new
+Terraform deps should call `Terraform.add_plugin(__FILE__)` in any file that adds to the Terraform DSL. For
+example, if you wanted to package a dep as a gem, the contents of your project might look like this:
+
+```
+terraform-yourgem/
+`-lib/
+  `-terraform/
+    `-yourgem.rb
+
+yourgem.rb
+----------
+require "terraform"
+
+module Terraform
+  module DSL
+    # Define your deps
+  end
+end
+
+Terraform.add_plugin(__FILE__)
+```
+
+Then in your application setup script you would write:
+
+```ruby
+require "terraform"
+require "terraform/yourgem"
+
+Terraform.write_terraform_files("./terraform")
+```
+
+This will write out the core Terraform DSL plus all required plugins, ready to be required by your bootstrap
+code on the server.
+
+For more complete example see [terraform-rbenv](https://github.com/dmacdougall/terraform-rbenv), which
+reimplements Terraform's existing rbenv deps as a plugin.
+
 Contribute
 ----------
 When developing this gem you can quickly preview and test your changes by loading your local copy of the gem
