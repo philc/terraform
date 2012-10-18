@@ -31,6 +31,7 @@ module Terraform
 
     def satisfy_dependencies
       STDOUT.sync = true # Ensure that we flush logging output as we go along.
+      @dependencies ||= []
       @dependencies.each do |dep|
         unless dep[:met?].call
           puts "* Dependency #{dep[:name]} is not met. Meeting it."
