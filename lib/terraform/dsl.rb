@@ -117,8 +117,8 @@ module Terraform
       dep "rbenv" do
         met? { in_path?("rbenv") }
         meet do
-          # These instructions are from https://github.com/sstephenson/rbenv/wiki/Using-rbenv-in-Production
-          shell "wget -q -O - https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash"
+          # These instructions are from https://github.com/fesplugas/rbenv-installer
+          shell "curl https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash"
           # We need to run rbenv init after install, which adjusts the path. If exec is causing us problems
           # down the road, we can perhaps simulate running rbenv init without execing.
           unless ARGV.include?("--forked-after-rbenv") # To guard against an infinite forking loop.
