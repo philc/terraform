@@ -76,12 +76,16 @@ module Terraform
       end
     end
 
-    def gem_installed?(gem) `gem list '#{gem}'`.include?(gem) end
+    def gem_installed?(gem, ruby_version = nil)
+      prefix = "env RBENV_VERSION=#{ruby_version} " unless ruby_version.nil?
+      `#{prefix}gem list '#{gem}'`.include?(gem)
+    end
 
-    def ensure_gem(gem)
+    def ensure_gem(gem, ruby_version = nil)
+      prefix = "env RBENV_VERSION=#{ruby_version} " unless ruby_version.nil?
       dep "gem: #{gem}" do
-        met? { gem_installed?(gem) }
-        meet { shell "gem install #{gem} --no-ri --no-rdoc" }
+        met? { gem_installed?(gem, ruby_version) }
+        meet { shell "#{prefix}gem install #{gem} --no-ri --no-rdoc" }
       end
     end
 
