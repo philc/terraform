@@ -77,12 +77,14 @@ module Terraform
     end
 
     def gem_installed?(gem, ruby_version = nil)
-      prefix = "env RBENV_VERSION=#{ruby_version} $RBENV_ROOT/shims/" unless ruby_version.nil?
+      rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
+      prefix = "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/" unless ruby_version.nil?
       `#{prefix}gem list '#{gem}'`.include?(gem)
     end
 
     def ensure_gem(gem, ruby_version = nil)
-      prefix = "env RBENV_VERSION=#{ruby_version} $RBENV_ROOT/shims/" unless ruby_version.nil?
+      rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
+      prefix = "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/" unless ruby_version.nil?
       dep "gem: #{gem}" do
         met? { gem_installed?(gem, ruby_version) }
         meet { shell "#{prefix}gem install #{gem} --no-ri --no-rdoc" }
