@@ -76,12 +76,18 @@ module Terraform
       end
     end
 
-    def gem_installed?(gem) `gem list '#{gem}'`.include?(gem) end
+    def gem_installed?(gem, ruby_version = nil)
+      rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
+      prefix = "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/" unless ruby_version.nil?
+      `#{prefix}gem list '#{gem}'`.include?(gem)
+    end
 
-    def ensure_gem(gem)
+    def ensure_gem(gem, ruby_version = nil)
+      rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
+      prefix = "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/" unless ruby_version.nil?
       dep "gem: #{gem}" do
-        met? { gem_installed?(gem) }
-        meet { shell "gem install #{gem} --no-ri --no-rdoc" }
+        met? { gem_installed?(gem, ruby_version) }
+        meet { shell "#{prefix}gem install #{gem} --no-ri --no-rdoc" }
       end
     end
 
@@ -117,8 +123,8 @@ module Terraform
       dep "rbenv" do
         met? { in_path?("rbenv") }
         meet do
-          # These instructions are from https://github.com/sstephenson/rbenv/wiki/Using-rbenv-in-Production
-          shell "wget -q -O - https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash"
+          # These instructions are from https://github.com/fesplugas/rbenv-installer
+          shell "curl https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash"
           # We need to run rbenv init after install, which adjusts the path. If exec is causing us problems
           # down the road, we can perhaps simulate running rbenv init without execing.
           unless ARGV.include?("--forked-after-rbenv") # To guard against an infinite forking loop.
