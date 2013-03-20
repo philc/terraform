@@ -85,18 +85,20 @@ module Terraform
       end
     end
 
-    def rbenv_gem_installed?(gem, ruby_version = nil)
+    def rbenv_shim_path(ruby_version)
+      return nil if ruby_version.nil?
       rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
-      prefix = "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/" unless ruby_version.nil?
-      `#{prefix}gem list '#{gem}'`.include?(gem)
+      "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/"
+    end
+
+    def rbenv_gem_installed?(gem, ruby_version = nil)
+      `#{rbenv_shim_path(ruby_version)}gem list '#{gem}'`.include?(gem)
     end
 
     def ensure_rbenv_gem(gem, ruby_version = nil)
-      rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
-      prefix = "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/" unless ruby_version.nil?
       dep "gem: #{gem}" do
         met? { rbenv_gem_installed?(gem) }
-        meet { shell "#{prefix}gem install #{gem} --no-ri --no-rdoc" }
+        meet { shell "#{rbenv_shim_path(ruby_version)}gem install #{gem} --no-ri --no-rdoc" }
       end
     end
 
