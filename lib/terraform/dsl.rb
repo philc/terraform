@@ -60,6 +60,16 @@ module Terraform
       end
     end
 
+    def ensure_apt_get_update(oldest_acceptable_time)
+      dep "apt-get update" do
+        met? do
+          File.exists?("#{ENV['HOME']}/.apt-get-updated") &&
+            File.mtime("#{ENV['HOME']}/.apt-get-updated") >= oldest_acceptable_time
+        end
+        meet { `sudo apt-get update && touch $HOME/.apt-get-updated` }
+      end
+    end
+
     # Ensure an Ubuntu PPA is installed. The argument is the ppa location, in the form ppa:[USER]/[NAME]
     def ensure_ppa(ppa)
       ppa_part, location = ppa.split(":", 2)

@@ -43,6 +43,10 @@ The Terraform DSL provides these functions which are commonly used when provisio
     <td>Ensures the given packages are installed via apt-get.</td>
   </tr>
   <tr>
+    <td>ensure_apt_get_update(oldest_acceptable_time)</td>
+    <td>Runs apt-get update if it hasn't been run since the oldest_acceptable_time (a Time object).</td>
+  </tr>
+  <tr>
     <td>ensure_ppa(ppa_url)</td>
     <td>Ensures the given PPA (used on Ubuntu) is installed. "ppa_url" is of the form "ppa:user/name".</td>
   </tr>
