@@ -44,7 +44,8 @@ The Terraform DSL provides these functions which are commonly used when provisio
   </tr>
   <tr>
     <td>ensure_apt_get_update(oldest_acceptable_time)</td>
-    <td>Runs apt-get update if it hasn't been run since the oldest_acceptable_time (a Time object).</td>
+    <td>Runs apt-get update if it hasn't been run since the oldest_acceptable_time (a Time object).
+    Defaults to 30 days ago.</td>
   </tr>
   <tr>
     <td>ensure_ppa(ppa_url)</td>

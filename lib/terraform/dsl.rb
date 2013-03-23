@@ -60,7 +60,7 @@ module Terraform
       end
     end
 
-    def ensure_apt_get_update(oldest_acceptable_time)
+    def ensure_apt_get_update(oldest_acceptable_time = Time.now - 30*24*60*60)
       dep "apt-get update" do
         met? do
           File.exists?("#{ENV['HOME']}/.apt_get_updated") &&
