@@ -125,7 +125,7 @@ module Terraform
     def ensure_rbenv
       # TODO(caleb): The package is 'git-core' in older Ubuntu releases. We should have a mechanism for
       # handling different releases; see https://github.com/philc/terraform/issues/15.
-      ensure_package "git"
+      ensure_packages "git", "curl"
       dep "rbenv" do
         met? { in_path?("rbenv") }
         meet do
