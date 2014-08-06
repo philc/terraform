@@ -80,7 +80,7 @@ module Terraform
       dep "ppa: #{location}" do
         met? { !`apt-cache policy 2> /dev/null | grep ppa.launchpad.net/#{location}/`.empty? }
         meet do
-          shell "sudo add-apt-repository #{ppa}"#, :silent => true
+          shell "sudo add-apt-repository --yes #{ppa}"#, :silent => true
           shell "sudo apt-get update"#, :silent => true
         end
       end
