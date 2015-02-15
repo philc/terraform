@@ -95,6 +95,23 @@ module Terraform
       end
     end
 
+    def rbenv_shim_path(ruby_version)
+      return nil if ruby_version.nil?
+      rbenv_root = ENV["RBENV_ROOT"] || "#{ENV["HOME"]}/.rbenv"
+      "env RBENV_VERSION=#{ruby_version} #{rbenv_root}/shims/"
+    end
+
+    def rbenv_gem_installed?(gem, ruby_version = nil)
+      `#{rbenv_shim_path(ruby_version)}gem list '#{gem}'`.include?(gem)
+    end
+
+    def ensure_rbenv_gem(gem, ruby_version = nil)
+      dep "gem: #{gem}" do
+        met? { rbenv_gem_installed?(gem) }
+        meet { shell "#{rbenv_shim_path(ruby_version)}gem install #{gem} --no-ri --no-rdoc" }
+      end
+    end
+
     # Ensures the file at dest_path is exactly the same as the one in source_path.
     # Invokes the given block if the file is changed. Use this block to restart a service, for instance.
     def ensure_file(source_path, dest_path, &on_change)
