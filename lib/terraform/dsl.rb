@@ -88,12 +88,16 @@ module Terraform
 
     def gem_installed?(gem) `gem list '#{gem}'`.include?(gem) end
 
-    def ensure_gem(gem)
+    # @param opts :system => true lets you use ensure_gem with a system ruby instead of a user-level Ruby
+    # switcher.
+    def ensure_gem(gem, opts={})
       dep "gem: #{gem}" do
+        sudo = opts[:system] ? "sudo" : ""
         met? { gem_installed?(gem) }
-        meet { shell "gem install #{gem} --no-ri --no-rdoc" }
+        meet { shell "#{sudo} gem install #{gem} --no-ri --no-rdoc" }
       end
     end
+
 
     # Ensures the file at dest_path is exactly the same as the one in source_path.
     # Invokes the given block if the file is changed. Use this block to restart a service, for instance.
