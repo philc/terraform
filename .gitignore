@@ -2,3 +2,5 @@
 .bundle
 Gemfile.lock
 pkg/*
+# exclude ruby mine files
+.idea/
